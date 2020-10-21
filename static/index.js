@@ -5,8 +5,8 @@
 
 console.log(ml5.version)
 
-let cW = 800
-let cH = 600
+let cW = 400
+let cH = 300
 
 let zoomFactor = 0.1
 
@@ -40,10 +40,10 @@ function gotResults(error, results) {
         boxes = []
         results.forEach(res => {
             box = {
-                "x" : res._box._x,
-            "y" : res._box._y,
-            "w" : res._box._width,
-            "h" : res._box._height
+                "x" : parseInt(res._box._x),
+                "y" : parseInt(res._box._y),
+                "w" : parseInt(res._box._width),
+                "h" : parseInt(res._box._height)
             }
             boxes.push(box)
             classifier.classify(video.get(box.x + (box.x * zoomFactor * -1), box.y + (box.y * zoomFactor * -1), box.w + (box.w * zoomFactor), box.h + (box.h * zoomFactor)), gotMaskResult)
@@ -85,7 +85,7 @@ function setup(){
 
     createCanvas(cW,cH);
     video = createCapture(VIDEO);
-    video.size(width, height);
+    video.size(cW, cH);
     video.hide();
     // video.hide(); // Hide the video element, and just show the canvas
     classifier = ml5.imageClassifier(imageModelURL + "model.json", maskClassifierReady)
@@ -96,7 +96,7 @@ function setup(){
 function draw(){
     
     
-    if(frameCount % 8 == 0)
+    if(frameCount % 1 == 0)
     {
     
     faceapi.detect(gotResults)
@@ -104,6 +104,6 @@ function draw(){
 }
 
 image(video,0,0, cW,cH)
-    drawBox(boxes,0,0,0);
+    drawBox(boxes,226,0,116);
 
 }
