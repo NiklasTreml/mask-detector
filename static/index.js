@@ -3,6 +3,7 @@
 // 3. store positions into arrays
 // 4. look at every face closeup and check for mask
 
+
 console.log(ml5.version)
 
 let cW = 400
@@ -14,6 +15,7 @@ let classifier;
 let imageModelURL = "/model/"
 
 let boxes = []
+let allResults = []
 
 function modelReady() {
     console.log("Model loaded");
@@ -32,7 +34,9 @@ function gotMaskResult(error, results) {
     textSize(32);
     fill(0, 102, 153);
     console.log(results[0].label, results[0].confidence)
-    $("#prediction").text(results[0].label + ": " + results[0].confidence);
+
+    allResults.push(results)
+
 }
 
 function gotResults(error, results) {
@@ -62,8 +66,10 @@ function drawBox(boxes, r, g, b) {
 
     // circle(x,y,10)
 
-    boxes.forEach(box => {
+    boxes.forEach((box, i) => {
+
         stroke(r, g, b)
+        text(i, box.x, box.y)
         line(box.x, box.y, box.x + box.w, box.y)
         line(box.x + box.w, box.y, box.x + box.w, box.y + box.h)
         line(box.x + box.w, box.y + box.h, box.x, box.y + box.h)
@@ -86,7 +92,8 @@ const detectionOptions = {
 
 function setup() {
 
-    createCanvas(cW, cH);
+    let cnv = createCanvas(cW, cH);
+    cnv.parent("canvas")
     video = createCapture(VIDEO);
     video.size(cW, cH);
     video.hide();
@@ -99,10 +106,14 @@ function setup() {
 function draw() {
 
 
-    if (frameCount % 1 == 0) {
+    if (frameCount % 2 == 0) {
 
         faceapi.detect(gotResults)
-
+        $("#predictionList").empty()
+        allResults.forEach((result, i) => {
+            $("#predictionList").append("<li id=''>" + result[0].label + " " + i + ": " + result[0].confidence + "</li>");
+        })
+        allResults = []
     }
 
     image(video, 0, 0, cW, cH)
