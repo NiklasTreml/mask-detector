@@ -67,9 +67,10 @@ function drawBox(boxes, r, g, b) {
     // circle(x,y,10)
 
     boxes.forEach((box, i) => {
-
-        stroke(r, g, b)
+        stroke(255, 255, 255)
+        fill(255, 255, 255)
         text(i, box.x, box.y)
+        stroke(r, g, b)
         line(box.x, box.y, box.x + box.w, box.y)
         line(box.x + box.w, box.y, box.x + box.w, box.y + box.h)
         line(box.x + box.w, box.y + box.h, box.x, box.y + box.h)
@@ -88,25 +89,28 @@ const detectionOptions = {
 // Initialize the magicFeature
 
 
-
+function preload() {
+    video = createCapture(VIDEO);
+    classifier = ml5.imageClassifier(imageModelURL + "model.json", maskClassifierReady)
+    faceapi = ml5.faceApi(video, detectionOptions, modelReady)
+}
 
 function setup() {
 
     let cnv = createCanvas(cW, cH);
     cnv.parent("canvas")
-    video = createCapture(VIDEO);
+
     video.size(cW, cH);
     video.hide();
     // video.hide(); // Hide the video element, and just show the canvas
-    classifier = ml5.imageClassifier(imageModelURL + "model.json", maskClassifierReady)
-    faceapi = ml5.faceApi(video, detectionOptions, modelReady)
+
 
 }
 
 function draw() {
 
 
-    if (frameCount % 2 == 0) {
+    if (frameCount % 3 == 0) {
 
         faceapi.detect(gotResults)
         $("#predictionList").empty()
