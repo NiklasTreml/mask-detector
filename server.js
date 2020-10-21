@@ -15,7 +15,7 @@ app.use(express.static("static"));
 
 app.get("/", (req, res) => {
     console.log("GET");
-    res.sendFile("C:\\Users\\A104356668\\Desktop\\repos\\mask-detector\\index.html")
+    res.sendFile(__dirname + "/index.html")
     
 })
 
