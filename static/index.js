@@ -90,9 +90,11 @@ const detectionOptions = {
 
 
 function preload() {
-    video = createCapture(VIDEO);
+
     classifier = ml5.imageClassifier(imageModelURL + "model.json", maskClassifierReady)
+    video = createCapture(VIDEO)
     faceapi = ml5.faceApi(video, detectionOptions, modelReady)
+
 }
 
 function setup() {
@@ -110,17 +112,19 @@ function setup() {
 function draw() {
 
 
-    if (frameCount % 3 == 0) {
+    if (frameCount % 10 == 0) {
 
         faceapi.detect(gotResults)
         $("#predictionList").empty()
         allResults.forEach((result, i) => {
-            $("#predictionList").append("<li id=''>" + result[0].label + " " + i + ": " + result[0].confidence + "</li>");
+            $("#predictionList").append("<li>" + result[0].label + " " + i + ": " + result[0].confidence + "</li>");
         })
         allResults = []
     }
 
+    // background(255)
     image(video, 0, 0, cW, cH)
+
     drawBox(boxes, 226, 0, 116);
 
 }
